@@ -4,24 +4,24 @@ import java.io.IOException;
 import java.util.Random;
 import java.util.UUID;
 
-public class Randoms {
+class Randoms {
 
     private Random random = new Random();
-
-    private char[] punctuationArray = {'?', '.', '!'};
+    private Utils utils;
     private char[] charArray = {'\r', '\n'};
-    private char[] arrayChar = {'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
-    private String[] upper = {"A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"};
-    private String[] search = {};
 
     public Randoms(Random random) {
         this.random = random;
     }
 
-    public Randoms() {
+    Randoms(Utils utils) {
+        this.utils = utils;
     }
 
-    public void getFiles(String path, int n, int size, String[] words, int probability) {
+    Randoms() {
+    }
+
+    void getFiles(String path, int n, int size, String[] words, int probability) {
         for (int i = 0; i < n; i++) {
             generateFile(path, i, size, words, probability);
         }
@@ -38,11 +38,12 @@ public class Randoms {
                 bos.write(generateParagraph(word, size, probability).getBytes());
             }
         } catch (IOException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
     private String generateParagraph(String[] word, int size, int probability) {
+
         StringBuilder newString = new StringBuilder();
 
         int a = random.nextInt(20) + 1;
@@ -54,6 +55,7 @@ public class Randoms {
     }
 
     private String generateNewSentence(String[] words, int lenght, int probability) {
+
         StringBuilder stringBuilder = new StringBuilder();
         String word;
         int vBeforeComma = 0;
@@ -83,30 +85,17 @@ public class Randoms {
             }
             stringBuilder.append(word);
         }
-        return stringBuilder.toString() + newPunct() + " ";
+        return stringBuilder.toString() + utils.newPunct() + " ";
     }
 
-    private String generateWord() {
+    String generateWord() {
         StringBuilder stringBuilder = new StringBuilder();
         int size = random.nextInt(15) + 1;
         for (int i = 0; i < size; i++) {
-            stringBuilder.append(newChar());
+            stringBuilder.append(utils.newChar());
         }
         return stringBuilder.toString();
     }
 
-    private char newChar() {
-        int numberofchar = random.nextInt(26);
-        return arrayChar[numberofchar];
-    }
 
-    private char newPunct() {
-        int numberofchar = random.nextInt(3);
-        return punctuationArray[numberofchar];
-    }
-
-    private String newLit() {
-        int numberofchar = random.nextInt(26);
-        return upper[numberofchar];
-    }
 }
